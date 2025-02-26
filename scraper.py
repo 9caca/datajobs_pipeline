@@ -4,12 +4,20 @@ import psycopg2
 from datetime import datetime
 import re
 import os
+import logging
 from dotenv import load_dotenv
 
-# Carrega as variáveis do arquivo .env
+# Configurar logging
+logging.basicConfig(
+    filename="datajobs_pipeline.log",
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
+# Carrega variáveis do arquivo .env
 load_dotenv()
 
-# Configurações de conexão com o banco de dados a partir das variáveis de ambiente
+# Configurações do banco de dados
 db_params = {
     "host": "localhost",
     "port": "5432",
@@ -18,28 +26,31 @@ db_params = {
     "password": os.getenv("POSTGRES_PASSWORD")
 }
 
-# Função para conectar ao banco de dados
+# Conectar ao banco de dados
 def connect_to_db():
     try:
         conn = psycopg2.connect(**db_params)
-        print("Conexão com o banco de dados bem-sucedida!")
+        logging.info("Conexão com o banco de dados bem-sucedida!")
         return conn
     except Exception as e:
-        print(f"Erro ao conectar ao banco de dados: {e}")
+        logging.error(f"Erro ao conectar ao banco de dados: {e}")
         return None
 
-# Função para inserir uma empresa no banco de dados (ou obter o ID se já existir)
+# Verificar se a vaga já existe no banco de dados
+def job_exists(conn, link):
+    cursor = conn.cursor()
+    cursor.execute("SELECT id FROM jobs WHERE link = %s", (link,))
+    return cursor.fetchone() is not None
+
+# Inserir ou obter ID da empresa
 def insert_or_get_company(conn, company_name, location):
     cursor = conn.cursor()
-    
-    # Verifica se a empresa já existe
     cursor.execute("SELECT id FROM companies WHERE name = %s", (company_name,))
     result = cursor.fetchone()
     
     if result:
-        return result[0]  # Retorna o ID da empresa existente
+        return result[0]
     else:
-        # Insere a nova empresa
         cursor.execute(
             "INSERT INTO companies (name, location) VALUES (%s, %s) RETURNING id",
             (company_name, location)
@@ -48,154 +59,218 @@ def insert_or_get_company(conn, company_name, location):
         conn.commit()
         return company_id
 
-# Função para inserir uma vaga de trabalho no banco de dados
-def insert_job(conn, title, company_id, location, salary_range, job_type, date_posted, source, link):
+# Extrair faixa salarial da página individual
+def extract_salary_range(soup):
+    salary_tag = soup.find("span", {"property": "baseSalary", "typeof": "MonetaryAmount"})
+    if not salary_tag:
+        return "Not specified"
+    
+    try:
+        min_value = salary_tag.find("span", {"property": "minValue"}).text.strip()
+        max_value = salary_tag.find("span", {"property": "maxValue"}).text.strip()
+        unit_text = salary_tag.find("span", {"property": "unitText"}).get("class", ["HOUR"])[0]
+        
+        if unit_text == "HOUR":
+            return f"${min_value} to ${max_value} hourly"
+        elif unit_text == "YEAR":
+            return f"${min_value} to ${max_value} yearly"
+        else:
+            return f"${min_value} to ${max_value} {unit_text.lower()}"
+    except Exception as e:
+        logging.error(f"Erro ao extrair faixa salarial: {e}")
+        return "Not specified"
+
+# Extrair experiência requerida
+def extract_experience(soup):
+    experience_section = soup.find("h4", text="Experience")
+    if experience_section and experience_section.find_next("p"):
+        return experience_section.find_next("p").text.strip()
+    return "Not specified"
+
+# Extrair configuração de trabalho
+def extract_work_setting(soup):
+    # Verificar se é remoto
+    remote_tag = soup.find("span", text="Remote")
+    if remote_tag:
+        return "Remote"
+    
+    # Verificar outras configurações
+    work_setting_tag = soup.find("h4", text="Work setting")
+    if work_setting_tag and work_setting_tag.find_next("ul"):
+        settings = [li.text.strip() for li in work_setting_tag.find_next("ul").find_all("li")]
+        return ", ".join(settings)
+    
+    return "Not specified"
+
+# Extrair tarefas principais
+def extract_tasks(soup):
+    tasks_tag = soup.find("h4", text="Tasks")
+    if tasks_tag and tasks_tag.find_next("ul"):
+        return [li.text.strip() for li in tasks_tag.find_next("ul").find_all("li")]
+    return []
+
+# Extrair tecnologias e ferramentas
+def extract_technologies(soup):
+    tech_tag = soup.find("h4", text="Computer and technology knowledge")
+    if tech_tag and tech_tag.find_next("ul"):
+        return [li.text.strip() for li in tech_tag.find_next("ul").find_all("li")]
+    return []
+
+# Inserir tarefas no banco de dados
+def insert_tasks(conn, job_id, tasks):
+    cursor = conn.cursor()
+    for task in tasks:
+        try:
+            cursor.execute(
+                "INSERT INTO job_tasks (job_id, task) VALUES (%s, %s)",
+                (job_id, task)
+            )
+        except Exception as e:
+            conn.rollback()
+            logging.error(f"Erro ao inserir tarefa {task}: {e}")
+            return False
+    
+    conn.commit()
+    return True
+
+# Inserir tecnologias no banco de dados
+def insert_technologies(conn, job_id, technologies):
+    cursor = conn.cursor()
+    for tech in technologies:
+        try:
+            cursor.execute(
+                "INSERT INTO job_technologies (job_id, technology) VALUES (%s, %s)",
+                (job_id, tech)
+            )
+        except Exception as e:
+            conn.rollback()
+            logging.error(f"Erro ao inserir tecnologia {tech}: {e}")
+            return False
+    
+    conn.commit()
+    return True
+
+# Inserir vaga no banco de dados
+def insert_job(conn, title, company_id, location, salary_range, job_type, date_posted, 
+               source, link, experience_required, work_setting):
     cursor = conn.cursor()
     
-    # Converte a data de texto para objeto date
-    # Exemplo de formato: "Date posted: 11 February 2025"
+    # Extrai data de postagem
     date_match = re.search(r'(\d+)\s+([A-Za-z]+)\s+(\d{4})', date_posted)
+    month_names = {
+        "January": 1, "February": 2, "March": 3, "April": 4,
+        "May": 5, "June": 6, "July": 7, "August": 8,
+        "September": 9, "October": 10, "November": 11, "December": 12
+    }
+    
     if date_match:
         day, month_name, year = date_match.groups()
-        
-        # Traduz nomes de meses em inglês para português, se necessário
-        month_names = {
-            "January": 1, "February": 2, "March": 3, "April": 4,
-            "May": 5, "June": 6, "July": 7, "August": 8,
-            "September": 9, "October": 10, "November": 11, "December": 12
-        }
-        
-        month_num = month_names.get(month_name, 1)  # Padrão para janeiro se não encontrar
+        month_num = month_names.get(month_name, 1)
         formatted_date = f"{year}-{month_num:02d}-{int(day):02d}"
         date_obj = datetime.strptime(formatted_date, '%Y-%m-%d').date()
     else:
-        # Se não conseguir extrair a data, usa a data atual
         date_obj = datetime.now().date()
-    
+
     try:
-        # Insere a vaga
         cursor.execute(
             """
-            INSERT INTO jobs (title, company_id, location, salary_range, job_type, date_posted, source, link, created_at)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, CURRENT_TIMESTAMP)
+            INSERT INTO jobs (title, company_id, location, salary_range, job_type, date_posted, 
+                             source, link, created_at, experience_required, work_setting)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, CURRENT_TIMESTAMP, %s, %s)
             RETURNING id
             """,
-            (title, company_id, location, salary_range, job_type, date_obj, source, link)
+            (title, company_id, location, salary_range, job_type, date_obj, 
+             source, link, experience_required, work_setting)
         )
         job_id = cursor.fetchone()[0]
         conn.commit()
+        logging.info(f"Vaga inserida com sucesso! ID: {job_id}")
         return job_id
     except Exception as e:
         conn.rollback()
-        print(f"Erro ao inserir vaga: {e}")
+        logging.error(f"Erro ao inserir vaga: {e}")
         return None
 
-# URL da busca no Job Bank para Halifax
-url = "https://www.jobbank.gc.ca/jobsearch/jobsearch?searchstring=data+engineer&location=Halifax"
+# URL da busca no Job Bank para todo o Canadá
+url = "https://www.jobbank.gc.ca/jobsearch/jobsearch?searchstring=data+engineer"
+headers = {"User-Agent": "Mozilla/5.0"}
 
 # Conectar ao banco de dados
 conn = connect_to_db()
 if not conn:
-    print("Não foi possível conectar ao banco de dados. Encerrando.")
+    logging.error("Não foi possível conectar ao banco de dados. Encerrando.")
     exit(1)
 
-# Faz a requisição HTTP para obter o HTML da página
-headers = {"User-Agent": "Mozilla/5.0"}
+# Fazer requisição à página
 response = requests.get(url, headers=headers)
 
 if response.status_code == 200:
     soup = BeautifulSoup(response.text, "html.parser")
-
     jobs = soup.find_all("a", class_="resultJobItem")
-    seen_links = set()  # Para evitar duplicatas
-    
+    seen_links = set()
     job_count = 0
 
     for job in jobs:
-        title = job.find("span", class_="noctitle").text.strip()
-        company = job.find("li", class_="business").text.strip()
+        title = job.find("span", class_="noctitle").get_text(strip=True)
+        company = job.find("li", class_="business").get_text(strip=True)
 
-        # Verifica se é remoto
-        remote_tag = job.find("span", class_="telework")
-        is_remote = remote_tag and "Remote" in remote_tag.text
-
-        # Obtém a localização
         location_tag = job.find("li", class_="location")
-        location = location_tag.text.replace("Location", "").strip() if location_tag else "Not specified"
+        location = location_tag.get_text(strip=True).replace("Location", "") if location_tag else "Not specified"
 
-        # Se for remoto, sobrescrevemos a localização
-        if is_remote:
+        remote_tag = job.find("span", class_="telework")
+        if remote_tag and "Remote" in remote_tag.get_text(strip=True):
             location = "Remote"
 
-        # Filtrar apenas Halifax e Remote
-        if location != "Halifax (NS)" and location != "Remote":
-            continue  # Pula a vaga se não for de interesse
-
-        # Obtém o salário
-        salary_tag = job.find("li", class_="salary")
-        salary = salary_tag.text.replace("Salary:", "").strip() if salary_tag else "Not specified"
-
-        # Obtém a data de postagem
-        date_posted = job.find("li", class_="date").text.strip()
-
-        # Método de aplicação
-        apply_method_tag = job.find("span", class_="appmethod")
-        apply_method = apply_method_tag.text.strip() if apply_method_tag else "Not specified"
-
-        # Link da vaga
+        date_posted = job.find("li", class_="date").get_text(strip=True)
+        job_type = "Remote" if location == "Remote" else "On-site"
         link = "https://www.jobbank.gc.ca" + job["href"]
-
-        # Evita duplicatas
-        if link in seen_links:
+        
+        # Evitar duplicatas
+        if link in seen_links or job_exists(conn, link):
+            logging.info(f"Vaga já processada ou duplicada: {title}")
             continue
         seen_links.add(link)
 
-        # Determina o tipo de trabalho (simplificado)
-        job_type = "Remote" if is_remote else "On-site"
-
-        # Exibindo os dados formatados
-        print(f"Title: {title}")
-        print(f"Company: {company}")
-        print(f"Location: {location}")
-        print(f"Salary: {salary}")
-        print(f"Date Posted: {date_posted}")
-        print(f"Apply Method: {apply_method}")
-        print(f"Link: {link}")
-        
-        # Inserir dados no banco de dados
         try:
-            # Primeiro insere ou obtém a empresa
-            company_id = insert_or_get_company(conn, company, location)
-            
-            # Depois insere a vaga
-            job_id = insert_job(
-                conn, 
-                title, 
-                company_id, 
-                location, 
-                salary, 
-                job_type, 
-                date_posted, 
-                "Job Bank", 
-                link
-            )
-            
-            if job_id:
-                print(f"Vaga inserida com sucesso! ID: {job_id}")
-                job_count += 1
+            # Acessar a página individual da vaga para obter detalhes adicionais
+            job_response = requests.get(link, headers=headers)
+            if job_response.status_code == 200:
+                job_soup = BeautifulSoup(job_response.text, "html.parser")
+                
+                # Extrair informações adicionais
+                salary_range = extract_salary_range(job_soup)
+                experience_required = extract_experience(job_soup)
+                work_setting = extract_work_setting(job_soup)
+                tasks = extract_tasks(job_soup)
+                technologies = extract_technologies(job_soup)
+                
+                # Inserir empresa e vaga no banco de dados
+                company_id = insert_or_get_company(conn, company, location)
+                job_id = insert_job(
+                    conn, title, company_id, location, salary_range, job_type, 
+                    date_posted, "Job Bank", link, experience_required, work_setting
+                )
+                
+                # Inserir tarefas e tecnologias
+                if job_id:
+                    if tasks:
+                        insert_tasks(conn, job_id, tasks)
+                    if technologies:
+                        insert_technologies(conn, job_id, technologies)
+                    job_count += 1
+                    logging.info(f"Processada vaga {title} com {len(tasks)} tarefas e {len(technologies)} tecnologias")
             else:
-                print("Falha ao inserir a vaga.")
-        except Exception as e:
-            print(f"Erro durante o processamento da vaga: {e}")
+                logging.error(f"Erro ao acessar página individual da vaga {title}: {job_response.status_code}")
         
-        print("-" * 50)
-    
-    print(f"Total de vagas inseridas: {job_count}")
+        except Exception as e:
+            logging.error(f"Erro ao processar vaga {title}: {e}")
+
+    logging.info(f"Total de vagas inseridas: {job_count}")
 
 else:
-    print("Failed to retrieve job listings. Status code:", response.status_code)
+    logging.error(f"Falha ao recuperar vagas. Status code: {response.status_code}")
 
-# Fechar a conexão com o banco
+# Fechar conexão com o banco
 if conn:
     conn.close()
-    print("Conexão com o banco de dados fechada.")
+    logging.info("Conexão com o banco de dados fechada.")

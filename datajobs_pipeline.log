@@ -1,0 +1,125 @@
+2025-02-25 22:09:29,339 - INFO - Conexão com o banco de dados bem-sucedida!
+2025-02-25 22:09:30,214 - INFO - Vaga inserida com sucesso! ID: 5
+2025-02-25 22:09:30,227 - INFO - Vaga inserida com sucesso! ID: 6
+2025-02-25 22:09:30,228 - INFO - Total de vagas inseridas: 2
+2025-02-25 22:09:30,228 - INFO - Conexão com o banco de dados fechada.
+2025-02-25 23:01:03,344 - INFO - Conexão com o banco de dados bem-sucedida!
+2025-02-25 23:01:04,728 - INFO - Vaga inserida com sucesso! ID: 7
+2025-02-25 23:01:04,729 - INFO - Processada vaga data engineer com 0 tarefas e 0 tecnologias
+2025-02-25 23:01:05,291 - INFO - Vaga inserida com sucesso! ID: 8
+2025-02-25 23:01:05,291 - INFO - Processada vaga data engineer com 0 tarefas e 0 tecnologias
+2025-02-25 23:01:05,828 - INFO - Vaga inserida com sucesso! ID: 9
+2025-02-25 23:01:05,828 - INFO - Processada vaga data engineer com 0 tarefas e 0 tecnologias
+2025-02-25 23:01:06,342 - INFO - Vaga inserida com sucesso! ID: 10
+2025-02-25 23:01:06,342 - INFO - Processada vaga data engineer com 0 tarefas e 0 tecnologias
+2025-02-25 23:01:06,828 - ERROR - Erro ao extrair faixa salarial: 'NoneType' object has no attribute 'text'
+2025-02-25 23:01:06,853 - INFO - Vaga inserida com sucesso! ID: 11
+2025-02-25 23:01:06,854 - INFO - Processada vaga data engineer com 0 tarefas e 0 tecnologias
+2025-02-25 23:01:07,351 - INFO - Vaga inserida com sucesso! ID: 12
+2025-02-25 23:01:07,351 - INFO - Processada vaga data engineer com 0 tarefas e 0 tecnologias
+2025-02-25 23:01:07,900 - ERROR - Erro ao extrair faixa salarial: 'NoneType' object has no attribute 'text'
+2025-02-25 23:01:07,923 - INFO - Vaga inserida com sucesso! ID: 13
+2025-02-25 23:01:07,980 - INFO - Processada vaga data engineer com 16 tarefas e 6 tecnologias
+2025-02-25 23:01:08,513 - INFO - Vaga inserida com sucesso! ID: 14
+2025-02-25 23:01:08,513 - INFO - Processada vaga data engineer com 0 tarefas e 0 tecnologias
+2025-02-25 23:01:09,018 - INFO - Vaga inserida com sucesso! ID: 15
+2025-02-25 23:01:09,019 - INFO - Processada vaga data engineer com 0 tarefas e 0 tecnologias
+2025-02-25 23:01:09,603 - INFO - Vaga inserida com sucesso! ID: 16
+2025-02-25 23:01:09,603 - INFO - Processada vaga data engineer com 0 tarefas e 0 tecnologias
+2025-02-25 23:01:10,234 - INFO - Vaga inserida com sucesso! ID: 17
+2025-02-25 23:01:10,290 - INFO - Processada vaga data engineer com 7 tarefas e 23 tecnologias
+2025-02-25 23:01:10,936 - ERROR - Erro ao extrair faixa salarial: 'NoneType' object has no attribute 'text'
+2025-02-25 23:01:10,961 - INFO - Vaga inserida com sucesso! ID: 18
+2025-02-25 23:01:10,997 - INFO - Processada vaga data engineer com 9 tarefas e 7 tecnologias
+2025-02-25 23:01:11,641 - INFO - Vaga inserida com sucesso! ID: 19
+2025-02-25 23:01:11,679 - INFO - Processada vaga data engineer com 13 tarefas e 5 tecnologias
+2025-02-25 23:01:12,509 - INFO - Vaga inserida com sucesso! ID: 20
+2025-02-25 23:01:12,543 - INFO - Processada vaga data engineer com 11 tarefas e 3 tecnologias
+2025-02-25 23:01:13,176 - ERROR - Erro ao extrair faixa salarial: 'NoneType' object has no attribute 'text'
+2025-02-25 23:01:13,204 - INFO - Vaga inserida com sucesso! ID: 21
+2025-02-25 23:01:13,267 - INFO - Processada vaga data engineer com 17 tarefas e 15 tecnologias
+2025-02-25 23:01:13,868 - ERROR - Erro ao extrair faixa salarial: 'NoneType' object has no attribute 'text'
+2025-02-25 23:01:13,892 - INFO - Vaga inserida com sucesso! ID: 22
+2025-02-25 23:01:13,909 - INFO - Processada vaga data engineer com 7 tarefas e 0 tecnologias
+2025-02-25 23:01:14,498 - INFO - Vaga inserida com sucesso! ID: 23
+2025-02-25 23:01:14,523 - INFO - Processada vaga data engineer com 4 tarefas e 5 tecnologias
+2025-02-25 23:01:15,096 - ERROR - Erro ao extrair faixa salarial: 'NoneType' object has no attribute 'text'
+2025-02-25 23:01:15,119 - INFO - Vaga inserida com sucesso! ID: 24
+2025-02-25 23:01:15,150 - INFO - Processada vaga data engineer com 7 tarefas e 6 tecnologias
+2025-02-25 23:01:15,675 - INFO - Vaga inserida com sucesso! ID: 25
+2025-02-25 23:01:15,675 - INFO - Processada vaga data warehouse analyst com 0 tarefas e 0 tecnologias
+2025-02-25 23:01:16,559 - INFO - Vaga inserida com sucesso! ID: 26
+2025-02-25 23:01:16,559 - INFO - Processada vaga data engineer com 0 tarefas e 0 tecnologias
+2025-02-25 23:01:17,596 - ERROR - Erro ao extrair faixa salarial: 'NoneType' object has no attribute 'text'
+2025-02-25 23:01:17,620 - INFO - Vaga inserida com sucesso! ID: 27
+2025-02-25 23:01:17,634 - INFO - Processada vaga data warehouse analyst com 5 tarefas e 0 tecnologias
+2025-02-25 23:01:18,328 - INFO - Vaga inserida com sucesso! ID: 28
+2025-02-25 23:01:18,328 - INFO - Processada vaga data warehouse analyst com 0 tarefas e 0 tecnologias
+2025-02-25 23:01:18,777 - INFO - Vaga inserida com sucesso! ID: 29
+2025-02-25 23:01:18,852 - INFO - Processada vaga artificial intelligence (AI) designerThis job posting is advertised by a recruitment agency on behalf of the employer. com 14 tarefas e 22 tecnologias
+2025-02-25 23:01:19,397 - INFO - Vaga inserida com sucesso! ID: 30
+2025-02-25 23:01:19,397 - INFO - Processada vaga artificial intelligence (AI) designer com 0 tarefas e 0 tecnologias
+2025-02-25 23:01:19,862 - INFO - Vaga inserida com sucesso! ID: 31
+2025-02-25 23:01:19,862 - INFO - Processada vaga artificial intelligence designer com 0 tarefas e 0 tecnologias
+2025-02-25 23:01:19,862 - INFO - Total de vagas inseridas: 25
+2025-02-25 23:01:19,862 - INFO - Conexão com o banco de dados fechada.
+2025-02-25 23:39:31,662 - INFO - Conexão com o banco de dados bem-sucedida!
+2025-02-25 23:39:32,860 - INFO - Vaga inserida com sucesso! ID: 32
+2025-02-25 23:39:32,861 - INFO - Processada vaga data engineer com 0 tarefas e 0 tecnologias
+2025-02-25 23:39:33,451 - INFO - Vaga inserida com sucesso! ID: 33
+2025-02-25 23:39:33,451 - INFO - Processada vaga data engineer com 0 tarefas e 0 tecnologias
+2025-02-25 23:39:34,090 - INFO - Vaga inserida com sucesso! ID: 34
+2025-02-25 23:39:34,090 - INFO - Processada vaga data engineer com 0 tarefas e 0 tecnologias
+2025-02-25 23:39:34,511 - INFO - Vaga inserida com sucesso! ID: 35
+2025-02-25 23:39:34,511 - INFO - Processada vaga data engineer com 0 tarefas e 0 tecnologias
+2025-02-25 23:39:34,955 - ERROR - Erro ao extrair faixa salarial: 'NoneType' object has no attribute 'text'
+2025-02-25 23:39:34,970 - INFO - Vaga inserida com sucesso! ID: 36
+2025-02-25 23:39:34,970 - INFO - Processada vaga data engineer com 0 tarefas e 0 tecnologias
+2025-02-25 23:39:35,437 - INFO - Vaga inserida com sucesso! ID: 37
+2025-02-25 23:39:35,438 - INFO - Processada vaga data engineer com 0 tarefas e 0 tecnologias
+2025-02-25 23:39:36,202 - ERROR - Erro ao extrair faixa salarial: 'NoneType' object has no attribute 'text'
+2025-02-25 23:39:36,227 - INFO - Vaga inserida com sucesso! ID: 38
+2025-02-25 23:39:36,283 - INFO - Processada vaga data engineer com 16 tarefas e 6 tecnologias
+2025-02-25 23:39:36,782 - INFO - Vaga inserida com sucesso! ID: 39
+2025-02-25 23:39:36,782 - INFO - Processada vaga data engineer com 0 tarefas e 0 tecnologias
+2025-02-25 23:39:37,261 - INFO - Vaga inserida com sucesso! ID: 40
+2025-02-25 23:39:37,262 - INFO - Processada vaga data engineer com 0 tarefas e 0 tecnologias
+2025-02-25 23:39:37,712 - INFO - Vaga inserida com sucesso! ID: 41
+2025-02-25 23:39:37,713 - INFO - Processada vaga data engineer com 0 tarefas e 0 tecnologias
+2025-02-25 23:39:38,420 - INFO - Vaga inserida com sucesso! ID: 42
+2025-02-25 23:39:38,478 - INFO - Processada vaga data engineer com 7 tarefas e 23 tecnologias
+2025-02-25 23:39:39,032 - ERROR - Erro ao extrair faixa salarial: 'NoneType' object has no attribute 'text'
+2025-02-25 23:39:39,046 - INFO - Vaga inserida com sucesso! ID: 43
+2025-02-25 23:39:39,084 - INFO - Processada vaga data engineer com 9 tarefas e 7 tecnologias
+2025-02-25 23:39:39,861 - INFO - Vaga inserida com sucesso! ID: 44
+2025-02-25 23:39:39,901 - INFO - Processada vaga data engineer com 13 tarefas e 5 tecnologias
+2025-02-25 23:39:40,450 - INFO - Vaga inserida com sucesso! ID: 45
+2025-02-25 23:39:40,486 - INFO - Processada vaga data engineer com 11 tarefas e 3 tecnologias
+2025-02-25 23:39:40,990 - ERROR - Erro ao extrair faixa salarial: 'NoneType' object has no attribute 'text'
+2025-02-25 23:39:41,005 - INFO - Vaga inserida com sucesso! ID: 46
+2025-02-25 23:39:41,074 - INFO - Processada vaga data engineer com 17 tarefas e 15 tecnologias
+2025-02-25 23:39:41,598 - ERROR - Erro ao extrair faixa salarial: 'NoneType' object has no attribute 'text'
+2025-02-25 23:39:41,606 - INFO - Vaga inserida com sucesso! ID: 47
+2025-02-25 23:39:41,620 - INFO - Processada vaga data engineer com 7 tarefas e 0 tecnologias
+2025-02-25 23:39:42,259 - INFO - Vaga inserida com sucesso! ID: 48
+2025-02-25 23:39:42,284 - INFO - Processada vaga data engineer com 4 tarefas e 5 tecnologias
+2025-02-25 23:39:42,863 - ERROR - Erro ao extrair faixa salarial: 'NoneType' object has no attribute 'text'
+2025-02-25 23:39:42,903 - INFO - Vaga inserida com sucesso! ID: 49
+2025-02-25 23:39:42,932 - INFO - Processada vaga data engineer com 7 tarefas e 6 tecnologias
+2025-02-25 23:39:43,447 - INFO - Vaga inserida com sucesso! ID: 50
+2025-02-25 23:39:43,447 - INFO - Processada vaga data warehouse analyst com 0 tarefas e 0 tecnologias
+2025-02-25 23:39:44,154 - INFO - Vaga inserida com sucesso! ID: 51
+2025-02-25 23:39:44,154 - INFO - Processada vaga data engineer com 0 tarefas e 0 tecnologias
+2025-02-25 23:39:44,578 - ERROR - Erro ao extrair faixa salarial: 'NoneType' object has no attribute 'text'
+2025-02-25 23:39:44,592 - INFO - Vaga inserida com sucesso! ID: 52
+2025-02-25 23:39:44,603 - INFO - Processada vaga data warehouse analyst com 5 tarefas e 0 tecnologias
+2025-02-25 23:39:45,059 - INFO - Vaga inserida com sucesso! ID: 53
+2025-02-25 23:39:45,059 - INFO - Processada vaga data warehouse analyst com 0 tarefas e 0 tecnologias
+2025-02-25 23:39:45,515 - INFO - Vaga inserida com sucesso! ID: 54
+2025-02-25 23:39:45,588 - INFO - Processada vaga artificial intelligence (AI) designerThis job posting is advertised by a recruitment agency on behalf of the employer. com 14 tarefas e 22 tecnologias
+2025-02-25 23:39:46,054 - INFO - Vaga inserida com sucesso! ID: 55
+2025-02-25 23:39:46,054 - INFO - Processada vaga artificial intelligence (AI) designer com 0 tarefas e 0 tecnologias
+2025-02-25 23:39:46,488 - INFO - Vaga inserida com sucesso! ID: 56
+2025-02-25 23:39:46,488 - INFO - Processada vaga artificial intelligence designer com 0 tarefas e 0 tecnologias
+2025-02-25 23:39:46,488 - INFO - Total de vagas inseridas: 25
+2025-02-25 23:39:46,489 - INFO - Conexão com o banco de dados fechada.
