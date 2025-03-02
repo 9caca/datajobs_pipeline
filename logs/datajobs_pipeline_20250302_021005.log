@@ -1,0 +1,33 @@
+2025-03-02 02:10:05,535 - root - INFO - Logging inicializado. Arquivo de log: logs/datajobs_pipeline_20250302_021005.log
+2025-03-02 02:10:05,638 - database.db - INFO - Conexão com o banco de dados bem-sucedida!
+2025-03-02 02:10:05,639 - root - INFO - Iniciando extração de vagas para 'data engineer' das fontes: jobbank, linkedin, indeed
+2025-03-02 02:10:05,640 - root - INFO - Iniciando scraper do Job Bank...
+2025-03-02 02:10:05,640 - scraper.base_scraper - INFO - Iniciando scraping de JobBankScraper com URL: https://www.jobbank.gc.ca/jobsearch/jobsearch?searchstring=data+engineer
+2025-03-02 02:10:06,756 - scraper.base_scraper - INFO - Encontradas 24 vagas para processar
+2025-03-02 02:10:06,769 - scraper.base_scraper - ERROR - Erro ao processar vaga: 'job_id'
+2025-03-02 02:10:06,773 - scraper.base_scraper - ERROR - Erro ao processar vaga: 'job_id'
+2025-03-02 02:10:06,775 - scraper.base_scraper - ERROR - Erro ao processar vaga: 'job_id'
+2025-03-02 02:10:06,794 - scraper.base_scraper - ERROR - Erro ao processar vaga: 'job_id'
+2025-03-02 02:10:06,806 - scraper.base_scraper - ERROR - Erro ao processar vaga: 'job_id'
+2025-03-02 02:10:06,812 - scraper.base_scraper - ERROR - Erro ao processar vaga: 'job_id'
+2025-03-02 02:10:06,822 - scraper.base_scraper - ERROR - Erro ao processar vaga: 'job_id'
+2025-03-02 02:10:06,827 - scraper.base_scraper - ERROR - Erro ao processar vaga: 'job_id'
+2025-03-02 02:10:06,839 - scraper.base_scraper - ERROR - Erro ao processar vaga: 'job_id'
+2025-03-02 02:10:06,848 - scraper.base_scraper - ERROR - Erro ao processar vaga: 'job_id'
+2025-03-02 02:10:06,851 - scraper.base_scraper - ERROR - Erro ao processar vaga: 'job_id'
+2025-03-02 02:10:06,859 - scraper.base_scraper - ERROR - Erro ao processar vaga: 'job_id'
+2025-03-02 02:10:06,861 - scraper.base_scraper - ERROR - Erro ao processar vaga: 'job_id'
+2025-03-02 02:10:06,884 - scraper.base_scraper - ERROR - Erro ao processar vaga: 'job_id'
+2025-03-02 02:10:06,892 - scraper.base_scraper - ERROR - Erro ao processar vaga: 'job_id'
+2025-03-02 02:10:06,904 - scraper.base_scraper - ERROR - Erro ao processar vaga: 'job_id'
+2025-03-02 02:10:06,920 - scraper.base_scraper - ERROR - Erro ao processar vaga: 'job_id'
+2025-03-02 02:10:06,932 - scraper.base_scraper - ERROR - Erro ao processar vaga: 'job_id'
+2025-03-02 02:10:06,939 - scraper.base_scraper - ERROR - Erro ao processar vaga: 'job_id'
+2025-03-02 02:10:06,943 - scraper.base_scraper - ERROR - Erro ao processar vaga: 'job_id'
+2025-03-02 02:10:06,947 - scraper.base_scraper - ERROR - Erro ao processar vaga: 'job_id'
+2025-03-02 02:10:06,953 - scraper.base_scraper - ERROR - Erro ao processar vaga: 'job_id'
+2025-03-02 02:10:06,957 - scraper.base_scraper - ERROR - Erro ao processar vaga: 'job_id'
+2025-03-02 02:10:06,961 - scraper.base_scraper - ERROR - Erro ao processar vaga: 'job_id'
+2025-03-02 02:10:06,972 - scraper.base_scraper - INFO - Total de vagas inseridas: 0
+2025-03-02 02:10:06,975 - root - INFO - Job Bank: 0 vagas extraídas
+2025-03-02 02:10:06,977 - root - INFO - Pipeline concluído. Total de 0 vagas extraídas e armazenadas.
