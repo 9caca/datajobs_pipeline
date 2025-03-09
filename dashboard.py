@@ -3,23 +3,36 @@ import os
 import pandas as pd
 import psycopg2
 from dotenv import load_dotenv
+from database.db import get_db_connection
 
 # Set the dashboard width to full screen width
 st.set_page_config(layout="wide")
 
 load_dotenv()
+conn = get_db_connection()
 
-# Conecte-se ao banco de dados
-conn = psycopg2.connect(
-    host=os.getenv("DB_HOST"),
-    port=os.getenv("DB_PORT"),
-    database=os.getenv("DB_NAME"),
-    user=os.getenv("DB_USER"),
-    password=os.getenv("DB_PASSWORD")
-)
+# Consulta melhorada para mostrar mais informações
+jobs_query = """
+SELECT j.id, j.title, c.name as company, j.location, j.salary_range, 
+       j.date_posted, j.experience_required, j.work_setting
+FROM jobs j
+JOIN companies c ON j.company_id = c.id
+ORDER BY j.date_posted DESC;
+"""
+jobs_df = pd.read_sql(jobs_query, conn)
 
 # Crie o dashboard
 st.title("Dashboard de Vagas de Emprego")
+
+# Estatísticas rápidas
+st.subheader("Estatísticas Rápidas")
+col1, col2, col3, col4 = st.columns(4)
+col1.metric("Total de Vagas", len(jobs_df))
+col2.metric("Empresas Únicas", jobs_df['company'].nunique())
+if 'location' in jobs_df.columns:
+    col3.metric("Localizações", jobs_df['location'].nunique())
+if 'work_setting' in jobs_df.columns:
+    col4.metric("Vagas Remotas", len(jobs_df[jobs_df['work_setting'] == 'Remote']))
 
 # Seção de Requirements
 st.header("Requirements mais solicitados")
@@ -86,16 +99,6 @@ st.markdown("---")
 # Seção de Jobs (original)
 st.header("Lista de Vagas")
 
-# Consulta melhorada para mostrar mais informações
-jobs_query = """
-SELECT j.id, j.title, c.name as company, j.location, j.salary_range, 
-       j.date_posted, j.experience_required, j.work_setting
-FROM jobs j
-JOIN companies c ON j.company_id = c.id
-ORDER BY j.date_posted DESC;
-"""
-jobs_df = pd.read_sql(jobs_query, conn)
-
 # Adicionar filtros
 col1, col2, col3 = st.columns(3)
 with col1:
@@ -122,16 +125,6 @@ if 'experience_required' in jobs_df.columns and exp_filter != 'Todos':
 
 # Mostrar dados
 st.dataframe(filtered_df)
-
-# Estatísticas rápidas
-st.subheader("Estatísticas Rápidas")
-col1, col2, col3, col4 = st.columns(4)
-col1.metric("Total de Vagas", len(jobs_df))
-col2.metric("Empresas Únicas", jobs_df['company'].nunique())
-if 'location' in jobs_df.columns:
-    col3.metric("Localizações", jobs_df['location'].nunique())
-if 'work_setting' in jobs_df.columns:
-    col4.metric("Vagas Remotas", len(jobs_df[jobs_df['work_setting'] == 'Remote']))
 
 # Fechar a conexão
 conn.close()
