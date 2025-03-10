@@ -1,17 +1,27 @@
 import psycopg2
 import os
 from dotenv import load_dotenv
+import streamlit as st
 
-load_dotenv()  # Carrega as credenciais do .env
+load_dotenv()
 
 def get_db_connection():
-    return psycopg2.connect(
-        dbname=os.getenv("DB_NAME"),
-        user=os.getenv("DB_USER"),
-        password=os.getenv("DB_PASSWORD"),
-        host=os.getenv("DB_HOST"),
-        port=os.getenv("DB_PORT")
-    )
+    if hasattr(st, 'secrets') and 'postgres' in st.secrets:
+        return psycopg2.connect(
+            dbname=st.secrets.postgres.DB_NAME,
+            user=st.secrets.postgres.DB_USER,
+            password=st.secrets.postgres.DB_PASSWORD,
+            host=st.secrets.postgres.DB_HOST,
+            port=st.secrets.postgres.DB_PORT
+        )
+    else:
+        return psycopg2.connect(
+            dbname=os.getenv("DB_NAME"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD"),
+            host=os.getenv("DB_HOST"),
+            port=os.getenv("DB_PORT")
+        )
 
 def insert_job(title, company_id, location, salary_range, date_posted, link, is_remote, experience_required):
     conn = get_db_connection()
